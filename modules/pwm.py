@@ -1,3 +1,6 @@
+import time
+from RPi import GPIO
+
 class PWM_led:
     # a) De init-methode heeft 1 parameter 'pin' waarmee je het pinnummer meegeeft.
     # Dit nummer wordt bijgehouden in een klassevariabele met dezelfde naam.

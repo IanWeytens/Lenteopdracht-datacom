@@ -1,4 +1,6 @@
-from classes.pwm import PWM_led
+import time
+from RPi import GPIO
+from modules.pwm import PWM_led
 
 class RGB_led:
     # a) de init-methode krijgt 3 parameters; 'red', 'green', 'blue' mee die verwijzen naar de resp. pinnummers waarop
