@@ -18,9 +18,7 @@ from gpiozero import MCP3008
 
 spi = spidev.SpiDev()
 btn = 9 #pinnummer aanpassen
-Rgb = 5
-rGb = 6
-rgB = 13
+rgbled = RGB_led(5, 6, 13)
 
 spi.open(0, 0)  # BUS SPI0, slave on CE 0
 spi.max_speed_hz = 10 ** 5  # 100 KHz
@@ -29,10 +27,8 @@ potY = MCP3008(1)
 
 btnAmt = 0
 
-pwm_Rgb = GPIO.PWM(Rgb,50)
-pwm_rGb = GPIO.PWM(rGb,50)
-pwm_rgB = GPIO.PWM(rgB,50)
 
+#functions --------------------------------------------------------------------------------------------------------------------
 
 def setupGPIO():
     GPIO.setmode(GPIO.BCM)
@@ -41,7 +37,7 @@ def setupGPIO():
     GPIO.add_event_detect(btn, GPIO.FALLING, callback=btn_handler, bouncetime=50)
     GPIO.add_event_callback(btn, btn_handler)
 
-    GPIO.setup([Rgb, rGb, rgB], GPIO.OUT)
+    GPIO.setup(rgbled, GPIO.OUT)
 
     
     # GPIO.setup([...], GPIO.OUT)
@@ -58,6 +54,8 @@ def btn_handler():
     lcd.lcdStatus()
 
 
+#loop --------------------------------------------------------------------------------------------------------------------
+
 try:
     setupGPIO()
 
@@ -66,14 +64,14 @@ try:
         channelpotX = read_spi(0)
         percentageX = round(potX.value *100)
         print("PotX: Waarde = {}, Percentage = {}".format(channelpotX, percentageX))
-        pwm_Rgb.changeDutyCycle(percentageX)
 
         channelpotY = read_spi(1)
         percentageY = round(potY.value *100)
         print("PotY: Waarde = {}, Percentage = {}%".format(channelpotY, percentageY))
-        pwm_rgB.changeDutyCycle(percentageY)
 
-        pwm_rGb.changeDutyCycle((percentageX/percentageY)*2)
+        rgbled.brightnessR()
+        rgbled.brightnessG()
+        rgbled.brightnessB()
 
         time.sleep(1)
 
@@ -88,12 +86,13 @@ finally:
     spi.close()
 
 
-class PWM_led():
+#classes --------------------------------------------------------------------------------------------------------------------
 
-    def ():
-        pass
 
-class lcd():
+
+
+
+class lcd:
 
     def lcdStatus():
         pass
